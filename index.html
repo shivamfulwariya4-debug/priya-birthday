@@ -1,0 +1,2117 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0b0620" />
+    <title>Happy Birthday Priya 💖</title>
+    <style>
+      /* =========================================================
+        Birthday Surprise Website — Single File
+        Theme: Pink + Purple + Blue neon gradient, glassmorphism
+        Tech: HTML/CSS/JS only
+      ========================================================= */
+
+      :root {
+        --bg0: #070312;
+        --bg1: #0b0620;
+        --glass: rgba(255, 255, 255, 0.08);
+        --glass2: rgba(255, 255, 255, 0.12);
+        --stroke: rgba(255, 255, 255, 0.18);
+        --stroke2: rgba(255, 255, 255, 0.25);
+        --txt: rgba(255, 255, 255, 0.92);
+        --muted: rgba(255, 255, 255, 0.68);
+        --pink: #ff4fd8;
+        --purple: #8a5bff;
+        --blue: #2ee8ff;
+        --gold: #ffd36f;
+        --ok: #62ffb9;
+        --shadow: 0 22px 70px rgba(0, 0, 0, 0.55);
+        --shadow2: 0 12px 30px rgba(0, 0, 0, 0.45);
+        --radius: 22px;
+        --radius2: 16px;
+        --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        margin: 0;
+        font-family:
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          Segoe UI,
+          Roboto,
+          Helvetica,
+          Arial,
+          "Apple Color Emoji",
+          "Segoe UI Emoji";
+        color: var(--txt);
+        background: #070312;
+        overflow-x: hidden;
+      }
+
+      a {
+        color: inherit;
+      }
+
+      /* =========================================================
+        Animated Background Layers (gradient + stars + blobs)
+      ========================================================= */
+      .bg {
+        position: fixed;
+        inset: 0;
+        z-index: -5;
+        overflow: hidden;
+        background: #070312;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .bg::after {
+        content: "";
+        position: absolute;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle at 50% 50%, 
+          rgba(255, 79, 216, 0.1) 0%, 
+          rgba(138, 91, 255, 0.08) 25%, 
+          rgba(46, 232, 255, 0.05) 50%, 
+          transparent 100%);
+        animation: rotateMesh 20s linear infinite;
+      }
+      @keyframes rotateMesh {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+
+
+
+      /* Cinematic neon blobs */
+      .blob {
+        position: absolute;
+        width: 520px;
+        height: 520px;
+        border-radius: 50%;
+        filter: blur(52px);
+        opacity: 0.28;
+        mix-blend-mode: screen;
+        animation: floatBlob 10s var(--ease) infinite alternate;
+      }
+
+
+      /* =========================================================
+        Canvas FX (confetti + fireworks) — full screen
+      ========================================================= */
+      canvas#fx {
+        position: fixed;
+        inset: 0;
+        z-index: 7;
+        pointer-events: none;
+      }
+
+      /* =========================================================
+        Loading Screen
+      ========================================================= */
+      .loader {
+        position: fixed;
+        inset: 0;
+        z-index: 50;
+        display: grid;
+        place-items: center;
+        background: radial-gradient(1200px 800px at 30% 20%, rgba(255, 79, 216, 0.22), transparent 60%),
+          radial-gradient(900px 600px at 80% 30%, rgba(46, 232, 255, 0.18), transparent 55%),
+          linear-gradient(120deg, #070312, #0b0620, #070312);
+        transition: opacity 700ms var(--ease), visibility 700ms var(--ease);
+      }
+      .loader.hidden {
+        opacity: 0;
+        visibility: hidden;
+      }
+      .loaderCard {
+        width: min(560px, calc(100vw - 40px));
+        padding: 28px 22px;
+        border-radius: var(--radius);
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        box-shadow: var(--shadow);
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+        position: relative;
+        overflow: hidden;
+      }
+      .loaderCard::before {
+        content: "";
+        position: absolute;
+        inset: -2px;
+        border-radius: inherit;
+        background: linear-gradient(120deg, rgba(255, 79, 216, 0.55), rgba(138, 91, 255, 0.35), rgba(46, 232, 255, 0.55));
+        filter: blur(18px);
+        opacity: 0.5;
+        z-index: -1;
+      }
+      .loaderTitle {
+        font-weight: 800;
+        letter-spacing: 0.2px;
+        font-size: 18px;
+        margin: 0 0 6px;
+      }
+      .loaderSubtitle {
+        margin: 0 0 18px;
+        color: var(--muted);
+        line-height: 1.4;
+        font-size: 13px;
+      }
+      .bar {
+        height: 12px;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        background: rgba(0, 0, 0, 0.2);
+        overflow: hidden;
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+      }
+      .bar > span {
+        display: block;
+        height: 100%;
+        width: 0%;
+        border-radius: inherit;
+        background: linear-gradient(90deg, rgba(255, 79, 216, 0.9), rgba(138, 91, 255, 0.9), rgba(46, 232, 255, 0.9));
+        filter: drop-shadow(0 0 10px rgba(46, 232, 255, 0.35));
+        animation: load 2200ms var(--ease) forwards;
+      }
+      @keyframes load {
+        to {
+          width: 100%;
+        }
+      }
+      .loaderHint {
+        margin-top: 14px;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 12px;
+      }
+      .pill {
+        padding: 8px 10px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+      }
+
+      /* =========================================================
+        Cursor Glow + Trail
+      ========================================================= */
+      .mouseGlow {
+        position: fixed;
+        width: 540px;
+        height: 540px;
+        border-radius: 50%;
+        pointer-events: none;
+        transform: translate(-50%, -50%);
+        z-index: 4;
+        background: radial-gradient(circle at center, rgba(46, 232, 255, 0.16), rgba(138, 91, 255, 0.12), rgba(255, 79, 216, 0.08), transparent 60%);
+        filter: blur(2px);
+        mix-blend-mode: screen;
+        opacity: 0.9;
+        transition: opacity 300ms var(--ease);
+      }
+      @media (hover: none) {
+        .mouseGlow {
+          display: none;
+        }
+      }
+      .trailDot {
+        position: fixed;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 6;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.95), rgba(46, 232, 255, 0.55), rgba(255, 79, 216, 0.35), transparent 70%);
+        filter: drop-shadow(0 0 10px rgba(46, 232, 255, 0.45));
+        opacity: 0.0;
+        transform: translate(-50%, -50%) scale(0.9);
+        animation: trailFade 600ms var(--ease) forwards;
+      }
+      @keyframes trailFade {
+        0% {
+          opacity: 0.9;
+        }
+        100% {
+          opacity: 0;
+          transform: translate(-50%, -50%) scale(0.2);
+        }
+      }
+
+      /* =========================================================
+        Layout / Sections
+      ========================================================= */
+      .wrap {
+        position: relative;
+        z-index: 2;
+      }
+      .section {
+        width: min(1120px, calc(100vw - 32px));
+        margin: 0 auto;
+        padding: 76px 0;
+      }
+      .sectionHead {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 18px;
+        margin-bottom: 22px;
+      }
+      .sectionTitle {
+        margin: 0;
+        font-size: clamp(22px, 2.6vw, 34px);
+        letter-spacing: 0.2px;
+        font-weight: 850;
+      }
+      .sectionMeta {
+        color: rgba(255, 255, 255, 0.62);
+        font-size: 13px;
+      }
+
+      /* =========================================================
+        Glass / Neon Card + Borders
+      ========================================================= */
+      .glass {
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.06));
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        box-shadow: var(--shadow2);
+        border-radius: var(--radius);
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+      }
+      .neonBorder {
+        position: relative;
+        overflow: hidden;
+      }
+      .neonBorder::before {
+        content: "";
+        position: absolute;
+        inset: -2px;
+        border-radius: inherit;
+        background: conic-gradient(
+          from 180deg,
+          rgba(255, 79, 216, 0.0),
+          rgba(255, 79, 216, 0.75),
+          rgba(138, 91, 255, 0.7),
+          rgba(46, 232, 255, 0.8),
+          rgba(255, 79, 216, 0.75),
+          rgba(255, 79, 216, 0.0)
+        );
+        filter: blur(14px);
+        opacity: 0.55;
+        animation: spin 6.8s linear infinite;
+        z-index: -1;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      .pulse {
+        animation: pulse 2.6s var(--ease) infinite;
+      }
+      @keyframes pulse {
+        0% {
+          filter: drop-shadow(0 0 0 rgba(46, 232, 255, 0.0));
+          transform: translateZ(0);
+        }
+        60% {
+          filter: drop-shadow(0 0 18px rgba(46, 232, 255, 0.35));
+        }
+        100% {
+          filter: drop-shadow(0 0 0 rgba(46, 232, 255, 0.0));
+        }
+      }
+
+      /* =========================================================
+        Welcome / Hero (Full Screen)
+      ========================================================= */
+      .hero {
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: 24px 0 50px;
+      }
+      .heroInner {
+        width: min(1050px, calc(100vw - 32px));
+        display: grid;
+        gap: 18px;
+        grid-template-columns: 1.2fr 0.8fr;
+        align-items: stretch;
+      }
+      @media (max-width: 900px) {
+        .heroInner {
+          grid-template-columns: 1fr;
+        }
+      }
+      .heroCard {
+        padding: 26px 22px;
+        position: relative;
+      }
+      .heroTopRow {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 18px;
+        flex-wrap: wrap;
+      }
+      .badge {
+        display: inline-flex;
+        gap: 10px;
+        align-items: center;
+        padding: 10px 12px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 13px;
+      }
+      .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 999px;
+        background: radial-gradient(circle, rgba(98, 255, 185, 1), rgba(98, 255, 185, 0.2));
+        box-shadow: 0 0 18px rgba(98, 255, 185, 0.55);
+      }
+      .clockPill {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 12px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        font-variant-numeric: tabular-nums;
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.82);
+      }
+      .heroTitle {
+        margin: 0;
+        font-weight: 950;
+        font-size: clamp(30px, 4.6vw, 62px);
+        letter-spacing: -0.6px;
+        line-height: 1.03;
+      }
+      .glowText {
+        background: linear-gradient(
+          90deg, 
+          #fff, 
+          #ff4fd8, 
+          #8a5bff, 
+          #2ee8ff, 
+          #ff4fd8, 
+          #fff
+        );
+        background-size: 300% 100%;
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        text-shadow:
+          0 0 18px rgba(255, 79, 216, 0.18),
+          0 0 26px rgba(138, 91, 255, 0.16),
+          0 0 34px rgba(46, 232, 255, 0.12);
+        filter: drop-shadow(0 0 20px rgba(46, 232, 255, 0.16));
+        animation: textFlow 5s linear infinite, titleGlow 2.8s var(--ease) infinite alternate;
+      }
+      @keyframes textFlow {
+        0% { background-position: 0% 50%; }
+        100% { background-position: 100% 50%; }
+      }
+      @keyframes titleGlow {
+        0% {
+          filter: drop-shadow(0 0 10px rgba(255, 79, 216, 0.12)) drop-shadow(0 0 0 rgba(46, 232, 255, 0));
+        }
+        100% {
+          filter: drop-shadow(0 0 22px rgba(255, 79, 216, 0.25)) drop-shadow(0 0 20px rgba(46, 232, 255, 0.18));
+        }
+      }
+      .subTyping {
+        margin: 10px 0 0;
+        color: rgba(255, 255, 255, 0.78);
+        font-size: clamp(14px, 1.6vw, 18px);
+        line-height: 1.55;
+        min-height: 3.2em;
+      }
+      .caret {
+        display: inline-block;
+        width: 10px;
+        height: 1.2em;
+        vertical-align: -0.18em;
+        margin-left: 3px;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0));
+        border-radius: 2px;
+        animation: blink 800ms steps(2, end) infinite;
+      }
+      @keyframes blink {
+        50% {
+          opacity: 0.25;
+        }
+      }
+      .heroActions {
+        margin-top: 18px;
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+      .btn {
+        border: 0;
+        cursor: pointer;
+        color: rgba(255, 255, 255, 0.92);
+        font-weight: 750;
+        letter-spacing: 0.2px;
+        border-radius: 999px;
+        padding: 12px 16px;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        transition: transform 250ms var(--ease), box-shadow 250ms var(--ease), background 250ms var(--ease);
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .btn:hover {
+        transform: translateY(-2px) scale(1.01);
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+        background: rgba(255, 255, 255, 0.10);
+      }
+      .btn:active {
+        transform: translateY(0px) scale(0.99);
+      }
+      .btnPrimary {
+        background: linear-gradient(90deg, rgba(255, 79, 216, 0.35), rgba(138, 91, 255, 0.30), rgba(46, 232, 255, 0.25));
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        box-shadow:
+          0 10px 30px rgba(255, 79, 216, 0.14),
+          0 10px 30px rgba(46, 232, 255, 0.10);
+      }
+      .btnPrimary:hover {
+        box-shadow:
+          0 18px 50px rgba(255, 79, 216, 0.18),
+          0 18px 50px rgba(46, 232, 255, 0.14);
+      }
+      .btnGhost {
+        background: rgba(255, 255, 255, 0.05);
+      }
+      .tiny {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.68);
+        margin-top: 10px;
+      }
+
+      .fadeInUp {
+        opacity: 0;
+        transform: translateY(10px);
+        animation: fadeInUp 1000ms var(--ease) forwards;
+      }
+      .delay1 {
+        animation-delay: 200ms;
+      }
+      .delay2 {
+        animation-delay: 450ms;
+      }
+      .delay3 {
+        animation-delay: 650ms;
+      }
+      @keyframes fadeInUp {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Side panel in hero */
+      .sideGrid {
+        display: grid;
+        gap: 14px;
+        grid-template-rows: auto auto 1fr;
+      }
+      .miniCard {
+        padding: 16px 16px;
+        border-radius: var(--radius);
+      }
+      .miniRow {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+      }
+      .miniTitle {
+        margin: 0;
+        font-weight: 850;
+        font-size: 14px;
+        letter-spacing: 0.2px;
+      }
+      .miniValue {
+        font-variant-numeric: tabular-nums;
+        font-weight: 900;
+        color: rgba(255, 255, 255, 0.9);
+      }
+      .quote {
+        margin: 12px 0 0;
+        color: rgba(255, 255, 255, 0.72);
+        font-size: 13px;
+        line-height: 1.5;
+      }
+      .miniHint {
+        margin-top: 10px;
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.62);
+      }
+      .miniVideoCard {
+        padding: 10px;
+      }
+      .miniVideo {
+        width: 100%;
+        border-radius: 14px;
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        background: rgba(0, 0, 0, 0.3);
+        display: block;
+        aspect-ratio: 16 / 9;
+        object-fit: cover;
+      }
+      .miniVideoLabel {
+        margin: 8px 4px 2px;
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.7);
+      }
+
+      /* =========================================================
+        Surprise Overlay (wishes feed)
+      ========================================================= */
+      .overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 25;
+        display: grid;
+        place-items: center;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 520ms var(--ease);
+      }
+      .overlay.show {
+        opacity: 1;
+      }
+      .wishesPanel {
+        width: min(920px, calc(100vw - 30px));
+        max-height: min(78vh, 720px);
+        padding: 18px;
+        border-radius: var(--radius);
+        overflow: hidden;
+        pointer-events: auto;
+        position: relative;
+      }
+      .wishesTop {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-bottom: 10px;
+      }
+      .wishesTitle {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 900;
+        letter-spacing: 0.2px;
+      }
+      .wishesSub {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.68);
+        font-size: 12px;
+      }
+      .wishesList {
+        border-radius: var(--radius2);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(0, 0, 0, 0.18);
+        overflow: auto;
+        max-height: min(64vh, 620px);
+        padding: 10px;
+      }
+      .wishItem {
+        padding: 12px 12px;
+        margin: 10px 0;
+        border-radius: 14px;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.10);
+        animation: popIn 520ms var(--ease) both;
+        transform-origin: 20% 70%;
+        box-shadow: 0 10px 26px rgba(0, 0, 0, 0.28);
+      }
+      @keyframes popIn {
+        0% {
+          opacity: 0;
+          transform: translateY(10px) scale(0.96);
+          filter: blur(1.5px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+          filter: blur(0px);
+        }
+      }
+      .wishLine1 {
+        font-weight: 850;
+        color: rgba(255, 255, 255, 0.90);
+      }
+      .wishLine2 {
+        margin-top: 4px;
+        color: rgba(255, 255, 255, 0.72);
+        font-size: 13px;
+        line-height: 1.45;
+      }
+      .overlayGlow {
+        position: absolute;
+        inset: -20%;
+        background: radial-gradient(circle at 50% 50%, rgba(255, 79, 216, 0.2), rgba(138, 91, 255, 0.18), rgba(46, 232, 255, 0.14), transparent 60%);
+        filter: blur(16px);
+        opacity: 0;
+        transition: opacity 600ms var(--ease);
+        pointer-events: none;
+      }
+      .overlay.show .overlayGlow {
+        opacity: 1;
+      }
+
+      /* =========================================================
+        Cake Section
+      ========================================================= */
+      .cakeWrap {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        align-items: center;
+      }
+      @media (max-width: 900px) {
+        .cakeWrap {
+          grid-template-columns: 1fr;
+        }
+      }
+      .cakeCard {
+        padding: 22px 18px;
+      }
+      .cakeHint {
+        color: rgba(255, 255, 255, 0.70);
+        margin: 8px 0 0;
+        font-size: 13px;
+        line-height: 1.5;
+      }
+      .wishMsg {
+        margin-top: 12px;
+        font-weight: 900;
+        color: rgba(255, 255, 255, 0.92);
+        display: none;
+      }
+      .wishMsg.show {
+        display: block;
+        animation: popIn 520ms var(--ease) both;
+      }
+
+      .cakeStage {
+        display: grid;
+        place-items: center;
+        padding: 22px 12px;
+        min-height: 330px;
+      }
+      .cake {
+        position: relative;
+        width: min(360px, 84vw);
+        height: 280px;
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+        filter: drop-shadow(0 24px 60px rgba(0, 0, 0, 0.45));
+        transition: transform 350ms var(--ease);
+      }
+      .cake:hover {
+        transform: translateY(-4px) scale(1.01);
+      }
+      .plate {
+        position: absolute;
+        left: 50%;
+        bottom: 0;
+        transform: translateX(-50%);
+        width: 92%;
+        height: 22px;
+        border-radius: 999px;
+        background: linear-gradient(90deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.08));
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.06);
+        backdrop-filter: blur(8px);
+      }
+      .layer {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        overflow: hidden;
+      }
+      .layer.l1 {
+        bottom: 20px;
+        width: 88%;
+        height: 86px;
+        background: linear-gradient(180deg, rgba(255, 79, 216, 0.30), rgba(138, 91, 255, 0.18));
+      }
+      .layer.l2 {
+        bottom: 92px;
+        width: 74%;
+        height: 78px;
+        background: linear-gradient(180deg, rgba(46, 232, 255, 0.25), rgba(138, 91, 255, 0.14));
+      }
+      .layer.l3 {
+        bottom: 158px;
+        width: 58%;
+        height: 62px;
+        background: linear-gradient(180deg, rgba(255, 211, 111, 0.22), rgba(255, 79, 216, 0.12));
+      }
+      .drip {
+        position: absolute;
+        inset: 0;
+        background:
+          radial-gradient(18px 16px at 20% 0%, rgba(255, 255, 255, 0.25), transparent 70%),
+          radial-gradient(20px 18px at 40% 0%, rgba(255, 255, 255, 0.18), transparent 70%),
+          radial-gradient(18px 16px at 62% 0%, rgba(255, 255, 255, 0.18), transparent 70%),
+          radial-gradient(22px 18px at 80% 0%, rgba(255, 255, 255, 0.22), transparent 70%);
+        opacity: 0.6;
+        mix-blend-mode: screen;
+      }
+      .candles {
+        position: absolute;
+        left: 50%;
+        bottom: 216px;
+        transform: translateX(-50%);
+        width: 60%;
+        display: flex;
+        justify-content: space-around;
+        pointer-events: none;
+      }
+      .candle {
+        position: relative;
+        width: 12px;
+        height: 44px;
+        border-radius: 8px;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.75), rgba(255, 79, 216, 0.22));
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        box-shadow: 0 14px 30px rgba(255, 79, 216, 0.10);
+      }
+      .candle::before {
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: -10px;
+        transform: translateX(-50%);
+        width: 10px;
+        height: 10px;
+        border-radius: 10px;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.9), rgba(255, 211, 111, 0.65), rgba(255, 79, 216, 0.15), transparent 70%);
+        filter: drop-shadow(0 0 12px rgba(255, 211, 111, 0.6));
+        animation: flame 900ms ease-in-out infinite alternate;
+      }
+      @keyframes flame {
+        from {
+          transform: translateX(-50%) scale(0.95) translateY(1px);
+          opacity: 0.85;
+        }
+        to {
+          transform: translateX(-50%) scale(1.08) translateY(-1px);
+          opacity: 1;
+        }
+      }
+      .cake.blown .candle::before {
+        opacity: 0;
+        animation: none;
+      }
+
+      /* Cake cut */
+      .cutLine {
+        position: absolute;
+        left: 50%;
+        top: 42px;
+        bottom: 40px;
+        width: 2px;
+        transform: translateX(-50%) scaleY(0);
+        transform-origin: top;
+        background: linear-gradient(180deg, rgba(46, 232, 255, 0.0), rgba(46, 232, 255, 0.65), rgba(255, 79, 216, 0.65), rgba(46, 232, 255, 0.0));
+        filter: drop-shadow(0 0 14px rgba(46, 232, 255, 0.35));
+        opacity: 0.9;
+      }
+      .cake.cut .cutLine {
+        animation: cut 900ms var(--ease) forwards;
+      }
+      @keyframes cut {
+        0% {
+          transform: translateX(-50%) scaleY(0);
+          opacity: 0.0;
+        }
+        25% {
+          opacity: 1;
+        }
+        100% {
+          transform: translateX(-50%) scaleY(1);
+          opacity: 0.7;
+        }
+      }
+
+      /* =========================================================
+        Memories Gallery
+      ========================================================= */
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        gap: 14px;
+      }
+      .memCard {
+        grid-column: span 4;
+        padding: 12px;
+        border-radius: var(--radius);
+        transition: transform 380ms var(--ease), box-shadow 380ms var(--ease), border-color 380ms var(--ease);
+        cursor: default;
+        overflow: hidden;
+        position: relative;
+      }
+      .memCard:hover {
+        transform: translateY(-6px) scale(1.01);
+        border-color: rgba(255, 255, 255, 0.24);
+        box-shadow:
+          0 26px 60px rgba(0, 0, 0, 0.42),
+          0 0 26px rgba(255, 79, 216, 0.10);
+      }
+      @media (max-width: 980px) {
+        .memCard {
+          grid-column: span 6;
+        }
+      }
+      @media (max-width: 640px) {
+        .memCard {
+          grid-column: span 12;
+        }
+      }
+      .memImg {
+        aspect-ratio: 16 / 10;
+        width: 100%;
+        border-radius: 16px;
+        background:
+          radial-gradient(800px 300px at 60% 20%, rgba(46, 232, 255, 0.35), transparent 55%),
+          radial-gradient(700px 260px at 10% 80%, rgba(255, 79, 216, 0.28), transparent 55%),
+          linear-gradient(120deg, rgba(255, 255, 255, 0.10), rgba(255, 255, 255, 0.05));
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        overflow: hidden;
+        position: relative;
+        transform: translateZ(0);
+      }
+      .memImg > img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        opacity: 0.95;
+        transform: scale(1.03);
+        transition: transform 620ms var(--ease), filter 620ms var(--ease);
+        filter: saturate(1.05) contrast(1.05);
+      }
+      .memCard:hover .memImg > img {
+        transform: scale(1.10);
+        filter: saturate(1.15) contrast(1.08);
+      }
+      .memCaption {
+        padding: 12px 6px 6px;
+      }
+      .memCaption h4 {
+        margin: 0 0 6px;
+        font-size: 14px;
+        font-weight: 900;
+      }
+      .memCaption p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.68);
+        font-size: 12.5px;
+        line-height: 1.45;
+      }
+
+      /* =========================================================
+        Countdown Cards
+      ========================================================= */
+      .countRow {
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        gap: 14px;
+      }
+      .countCard {
+        grid-column: span 4;
+        padding: 18px;
+        border-radius: var(--radius);
+        text-align: center;
+      }
+      @media (max-width: 720px) {
+        .countCard {
+          grid-column: span 12;
+        }
+      }
+      .countNum {
+        font-size: clamp(32px, 4.2vw, 56px);
+        font-weight: 950;
+        letter-spacing: -0.4px;
+        background: linear-gradient(90deg, rgba(255, 255, 255, 0.95), rgba(46, 232, 255, 0.88), rgba(255, 79, 216, 0.85));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        filter: drop-shadow(0 0 14px rgba(46, 232, 255, 0.14));
+      }
+      .countLbl {
+        margin-top: 4px;
+        color: rgba(255, 255, 255, 0.70);
+        letter-spacing: 0.3px;
+        font-weight: 850;
+        text-transform: uppercase;
+        font-size: 12px;
+      }
+
+      /* =========================================================
+        Emotional Message
+      ========================================================= */
+      .messageCard {
+        padding: 22px 18px;
+        position: relative;
+      }
+      .messageCard pre {
+        margin: 0;
+        white-space: pre-wrap;
+        font-family: inherit;
+        color: rgba(255, 255, 255, 0.86);
+        line-height: 1.6;
+        font-size: 14px;
+      }
+
+      /* =========================================================
+        Video section
+      ========================================================= */
+      .videoCard {
+        padding: 14px;
+      }
+      .videoFrame {
+        width: 100%;
+        border-radius: 16px;
+        display: block;
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        background: rgba(0, 0, 0, 0.28);
+        box-shadow: 0 18px 44px rgba(0, 0, 0, 0.38);
+        max-height: min(72vh, 680px);
+      }
+      .videoNote {
+        margin: 10px 4px 2px;
+        color: rgba(255, 255, 255, 0.68);
+        font-size: 12.5px;
+      }
+
+      /* =========================================================
+        Floating Music Button
+      ========================================================= */
+      .musicBtn {
+        position: fixed;
+        right: 16px;
+        bottom: 16px;
+        z-index: 30;
+      }
+      .musicBtn button {
+        box-shadow:
+          0 20px 50px rgba(0, 0, 0, 0.45),
+          0 0 24px rgba(46, 232, 255, 0.14);
+      }
+
+      /* =========================================================
+        Page transition glow + finale overlay text
+      ========================================================= */
+      .screenGlow {
+        position: fixed;
+        inset: -10%;
+        pointer-events: none;
+        z-index: 20;
+        opacity: 0;
+        transition: opacity 600ms var(--ease);
+        background: radial-gradient(circle at 50% 50%, rgba(255, 79, 216, 0.20), rgba(138, 91, 255, 0.18), rgba(46, 232, 255, 0.14), transparent 60%);
+        filter: blur(16px);
+      }
+      .screenGlow.on {
+        opacity: 1;
+      }
+      .finale {
+        position: fixed;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        z-index: 40;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 850ms var(--ease);
+        background: radial-gradient(900px 700px at 50% 50%, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.82));
+      }
+      .finale.show {
+        opacity: 1;
+      }
+      .finaleText {
+        padding: 18px 18px;
+        border-radius: var(--radius);
+        text-align: center;
+        width: min(720px, calc(100vw - 40px));
+      }
+      .finaleText h2 {
+        margin: 0;
+        font-size: clamp(28px, 4.8vw, 56px);
+        font-weight: 950;
+        letter-spacing: -0.6px;
+      }
+      .finaleText p {
+        margin: 10px 0 0;
+        color: rgba(255, 255, 255, 0.70);
+        line-height: 1.5;
+        font-size: 13px;
+      }
+
+      /* =========================================================
+        Footer
+      ========================================================= */
+      footer {
+        padding: 44px 0 70px;
+        text-align: center;
+        color: rgba(255, 255, 255, 0.64);
+        font-size: 13px;
+      }
+      .heart {
+        color: rgba(255, 79, 216, 0.95);
+        text-shadow: 0 0 18px rgba(255, 79, 216, 0.28);
+      }
+
+      /* =========================================================
+        Reduced motion accessibility
+      ========================================================= */
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          animation-duration: 1ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 1ms !important;
+          scroll-behavior: auto !important;
+        }
+        .stars {
+          animation: none !important;
+        }
+      }
+      /* =========================================================
+        3D Rotating Cylinder Gallery
+      ========================================================= */
+      .gallerySection {
+        perspective: 2000px;
+        padding: 100px 0;
+        overflow: hidden;
+      }
+      .galleryContainer {
+        position: relative;
+        width: 280px;
+        height: 400px;
+        margin: 0 auto;
+        transform-style: preserve-3d;
+        transition: transform 1s var(--ease);
+        animation: rotateGallery 30s linear infinite;
+      }
+      .galleryContainer:hover {
+        animation-play-state: paused;
+      }
+      @keyframes rotateGallery {
+        from { transform: rotateY(0deg); }
+        to { transform: rotateY(360deg); }
+      }
+      .galleryItem {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+        border-radius: var(--radius2);
+        overflow: hidden;
+        border: 2px solid rgba(255, 255, 255, 0.15);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        backface-visibility: hidden;
+        -webkit-box-reflect: bottom 15px linear-gradient(transparent, transparent, rgba(0,0,0,0.2));
+      }
+      .galleryItem img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s var(--ease);
+      }
+      .galleryItem:hover img {
+        transform: scale(1.1);
+      }
+      .galleryItem .info {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 15px;
+        background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+        color: #fff;
+        font-size: 14px;
+        font-weight: 700;
+        opacity: 0;
+        transition: opacity 0.3s var(--ease);
+      }
+      .galleryItem:hover .info {
+        opacity: 1;
+      }
+
+      /* Matrix Rain Canvas */
+      #matrix {
+        position: fixed;
+        inset: 0;
+        z-index: -7;
+        opacity: 0.15;
+        pointer-events: none;
+      }
+
+      /* Animated floating Polaroid memories */
+      .floatingImage {
+        position: fixed;
+        pointer-events: none;
+        z-index: 1;
+        opacity: 0.25;
+        animation: floatUp 20s linear forwards;
+        object-fit: cover;
+      }
+      
+      .floatingImage.polaroid {
+        width: 140px;
+        padding: 10px 10px 30px;
+        background: #fff;
+        border: 1px solid rgba(0,0,0,0.1);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        animation: floatUp 20s linear forwards, swing 4s ease-in-out infinite alternate;
+      }
+      .floatingImage.polaroid img {
+        width: 100%;
+        height: 100px;
+        object-fit: cover;
+      }
+
+      .floatingImage.bubble {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        border: 3px solid var(--blue);
+        box-shadow: 0 0 20px var(--blue);
+        overflow: hidden;
+        animation: floatUp 15s linear forwards, pulse 3s ease-in-out infinite;
+      }
+      .floatingImage.bubble img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .floatingImage.frame {
+        width: 120px;
+        height: 150px;
+        border: 2px solid var(--pink);
+        padding: 5px;
+        background: rgba(255, 79, 216, 0.1);
+        box-shadow: 0 0 15px var(--pink);
+        animation: floatUp 25s linear forwards, rotateSmall 10s linear infinite;
+      }
+      .floatingImage.frame img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      @keyframes swing {
+        from { transform: rotate(-5deg); }
+        to { transform: rotate(5deg); }
+      }
+      @keyframes rotateSmall {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+      /* =========================================================
+        Fullscreen Background Slideshow (Ken Burns)
+      ========================================================= */
+      #bgSlideshow {
+        position: fixed;
+        inset: 0;
+        z-index: -6;
+        overflow: hidden;
+        opacity: 0.15; /* Subtle background presence */
+      /* Animated floating Polaroid memories */
+      .floatingImage {
+        position: fixed;
+        width: 140px;
+        padding: 10px 10px 30px;
+        background: #fff;
+        border: 1px solid rgba(0,0,0,0.1);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        pointer-events: none;
+        z-index: 1;
+        opacity: 0.25;
+        animation: floatUp 20s linear forwards, swing 4s ease-in-out infinite alternate;
+        object-fit: cover;
+      }
+      .floatingImage img {
+        width: 100%;
+        height: 100px;
+        object-fit: cover;
+      }
+      @keyframes swing {
+        from { transform: rotate(-5deg); }
+        to { transform: rotate(5deg); }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- =========================================================
+      LOADING SCREEN
+    ========================================================= -->
+    <div class="loader" id="loader" aria-live="polite">
+      <div class="loaderCard neonBorder">
+        <h1 class="loaderTitle">Preparing something magical for Priya…</h1>
+        <p class="loaderSubtitle">
+          Turn your volume on for the full cinematic feel. A surprise will unfold in a moment.
+        </p>
+        <div class="bar" aria-hidden="true"><span></span></div>
+        <div class="loaderHint">
+          <span class="pill">Neon • Glass • Emotions</span>
+          <span class="pill" id="loaderStatus">Initializing…</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- =========================================================
+      BACKGROUND LAYERS
+    ========================================================= -->
+    <div class="bg" aria-hidden="true">
+    </div>
+
+    <!-- Canvas for confetti + fireworks -->
+    <canvas id="fx" aria-hidden="true"></canvas>
+
+    <!-- Mouse glow -->
+    <div class="mouseGlow" id="mouseGlow" aria-hidden="true"></div>
+
+    <!-- Floating hearts/balloons/sparkles -->
+    <div class="floatLayer" id="floatLayer" aria-hidden="true"></div>
+
+    <!-- Screen glow burst -->
+    <div class="screenGlow" id="screenGlow" aria-hidden="true"></div>
+
+    <!-- =========================================================
+      AUTO MUSIC (local mp3 support)
+      1) Optional intro voice/song: "priya_s_Bollywood_Scene.mp3" (plays once)
+      2) Main loop track: "birthday.mp3" (loops continuously)
+      Keep both files next to this HTML, or rename src paths.
+    ========================================================= -->
+    <audio id="bgm" src="Priya_s_Bollywood_Scene.mp3" preload="auto" loop></audio>
+
+    <!-- Floating music player button -->
+    <div class="musicBtn">
+      <button class="btn btnGhost pulse" id="musicToggle" type="button" aria-label="Play or pause music">
+        🎵 <span id="musicLabel">Play Music</span>
+      </button>
+    </div>
+
+    <!-- =========================================================
+      SURPRISE OVERLAY (100+ wishes)
+    ========================================================= -->
+    <div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-label="Birthday wishes">
+      <div class="overlayGlow" aria-hidden="true"></div>
+      <div class="wishesPanel glass neonBorder">
+        <div class="wishesTop">
+          <div>
+            <p class="wishesTitle">A rain of wishes for Priya ✨</p>
+            <p class="wishesSub">Wishes will appear one by one. (Easter egg hint: type “PRIYA”)</p>
+          </div>
+          <button class="btn btnGhost" id="closeOverlay" type="button">Close</button>
+        </div>
+        <div class="wishesList" id="wishesList" tabindex="0" aria-label="Wishes feed"></div>
+      </div>
+    </div>
+
+    <!-- Finale overlay -->
+    <div class="finale" id="finale" aria-hidden="true">
+      <div class="finaleText glass neonBorder">
+        <h2 class="glowText">Happy Birthday Priya 💖</h2>
+        <p>May your world always glow with love, laughter, and the kind of happiness that never ends.</p>
+      </div>
+    </div>
+
+    <div class="wrap">
+      <!-- =========================================================
+        FULL SCREEN WELCOME PAGE
+      ========================================================= -->
+      <section class="hero" id="top">
+        <div class="heroInner">
+          <div class="heroCard glass neonBorder">
+            <div class="heroTopRow fadeInUp">
+              <div class="badge" title="Live vibe status">
+                <span class="dot"></span>
+                <span>Magical Mode: ON</span>
+              </div>
+              <div class="clockPill" title="Time remaining today">
+                ⏳ Ends In: <span id="countdown">--:--:--</span>
+              </div>
+            </div>
+
+            <h1 class="heroTitle fadeInUp delay1">
+              <span class="glowText">🎂 Happy Birthday Priya 🎂</span>
+            </h1>
+
+            <p class="subTyping fadeInUp delay2">
+              <span id="typing"></span><span class="caret" aria-hidden="true"></span>
+            </p>
+
+            <div class="heroActions fadeInUp delay3">
+              <button class="btn btnPrimary pulse" id="surpriseBtn" type="button">
+                Click For Surprise 🎁
+              </button>
+              <button class="btn btnGhost" id="scrollBtn" type="button">
+                Explore more ↓
+              </button>
+            </div>
+            <div class="tiny fadeInUp delay3">
+              Tip: add <b>priya_s_Bollywood_Scene.mp3</b> + <b>birthday.mp3</b>. If autoplay is blocked, press “Play Music” once.
+            </div>
+          </div>
+
+          <div class="sideGrid">
+            <div class="miniCard miniVideoCard glass neonBorder fadeInUp delay2">
+              <video
+                id="miniPriyaVideo"
+                class="miniVideo"
+                autoplay
+                loop
+                muted
+                playsinline
+                preload="auto"
+                src="Priya_s_Chapter.mp4"
+              ></video>
+              <p class="miniVideoLabel">Priya's Chapter (Live) 🎬</p>
+            </div>
+
+            <div class="miniCard glass neonBorder fadeInUp delay2">
+              <div class="miniRow">
+                <p class="miniTitle">Random Birthday Quote</p>
+                <span class="miniValue" id="quoteTag">✨</span>
+              </div>
+              <p class="quote" id="quoteText">Loading something beautiful…</p>
+            </div>
+
+            <div class="miniCard glass neonBorder fadeInUp delay3">
+              <div class="miniRow">
+                <p class="miniTitle">Priya Birthday Ends In</p>
+                <span class="miniValue" id="countMini">--:--:--</span>
+              </div>
+              <p class="miniHint">Live countdown until today ends (11:59:59 PM).</p>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <section class="section gallerySection fadeInUp delay3" id="gallery">
+        <div class="sectionHead" style="text-align: center; display: block; margin-bottom: 60px;">
+          <h2 class="sectionTitle glowText" style="font-size: 42px;">Captured Memories 📸</h2>
+          <p class="sectionMeta" style="font-size: 16px; margin-top: 10px;">A 3D journey through your beautiful moments</p>
+        </div>
+        <div class="galleryContainer" id="3dGallery">
+          <!-- Items will be positioned via JS or CSS based on count -->
+          <div class="galleryItem" style="transform: rotateY(0deg) translateZ(450px);">
+            <img src="IMG-20260509-WA0000.jpg" alt="Priya 1">
+            <div class="info">Golden hour vibes ✨</div>
+          </div>
+          <div class="galleryItem" style="transform: rotateY(60deg) translateZ(450px);">
+            <img src="IMG-20260509-WA0001.jpg" alt="Priya 2">
+            <div class="info">Pure happiness 💖</div>
+          </div>
+          <div class="galleryItem" style="transform: rotateY(120deg) translateZ(450px);">
+            <img src="IMG-20260509-WA0002.jpg" alt="Priya 3">
+            <div class="info">Radiant smile 🌟</div>
+          </div>
+          <div class="galleryItem" style="transform: rotateY(180deg) translateZ(450px);">
+            <img src="IMG-20260509-WA0003.jpg" alt="Priya 4">
+            <div class="info">Joyful moments 🎈</div>
+          </div>
+          <div class="galleryItem" style="transform: rotateY(240deg) translateZ(450px);">
+            <img src="IMG-20260509-WA0004.jpg" alt="Priya 5">
+            <div class="info">Beautiful memories 🎀</div>
+          </div>
+          <div class="galleryItem" style="transform: rotateY(300deg) translateZ(450px);">
+            <img src="IMG-20260509-WA0005.jpg" alt="Priya 6">
+            <div class="info">Eternal grace 🌙</div>
+          </div>
+        </div>
+      </section>
+
+      <footer>
+        Made with <span class="heart">💖</span> by Your Loving Brother
+      </footer>
+    </div>
+
+    <script>
+      /* =========================================================
+        Major Sections:
+        - Loader + entry animation
+        - Typing subtitle
+        - Autoplay music with floating button (loop)
+        - Floating hearts/balloons/sparkles
+        - Confetti + Fireworks canvas engine
+        - Surprise overlay: 100+ wishes feed + confetti + glow + fireworks
+        - Countdown + digital clock + rotating quotes
+        - Easter egg (type "PRIYA")
+      ========================================================= */
+
+      const $ = (id) => document.getElementById(id);
+
+      const loader = $("loader");
+      const loaderStatus = $("loaderStatus");
+      const typingEl = $("typing");
+      const scrollBtn = $("scrollBtn");
+      const surpriseBtn = $("surpriseBtn");
+      const overlay = $("overlay");
+      const wishesList = $("wishesList");
+      const closeOverlay = $("closeOverlay");
+      const screenGlow = $("screenGlow");
+      const finale = $("finale");
+      const musicToggle = $("musicToggle");
+      const musicLabel = $("musicLabel");
+      const introBgm = $("introBgm");
+      const bgm = $("bgm");
+      const miniPriyaVideo = $("miniPriyaVideo");
+      const floatLayer = $("floatLayer");
+      const mouseGlow = $("mouseGlow");
+
+      // --- Smooth scrolling
+      scrollBtn.addEventListener("click", () => {
+        miniPriyaVideo.scrollIntoView({ behavior: "smooth", block: "center" });
+      });
+
+      // =========================================================
+      // Loader sequence
+      // =========================================================
+      const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+      async function boot() {
+        const steps = ["Tuning neon lights…", "Summoning sparkles…", "Warming up wishes…", "Almost there…"];
+        for (const s of steps) {
+          loaderStatus.textContent = s;
+          await sleep(520);
+        }
+        await sleep(700);
+        loader.classList.add("hidden");
+        startTyping();
+        startAmbient();
+        tryAutoplayMusic();
+        // Gentle mini-confetti burst on open
+        confettiBurst(120);
+      }
+
+      // =========================================================
+      // Typing effect
+      // =========================================================
+      const subtitleText =
+        "May your life always be filled with happiness, success, love, smiles, and beautiful memories 💖";
+      let typingIndex = 0;
+      let typingStarted = false;
+
+      function startTyping() {
+        if (typingStarted) return;
+        typingStarted = true;
+        const tick = () => {
+          typingIndex += Math.max(1, Math.round(0.7 + Math.random() * 2));
+          typingEl.textContent = subtitleText.slice(0, typingIndex);
+          if (typingIndex < subtitleText.length) {
+            setTimeout(tick, 22 + Math.random() * 35);
+          }
+        };
+        tick();
+      }
+
+      // =========================================================
+      // Digital clock
+      // =========================================================
+      function pad2(n) {
+        return String(n).padStart(2, "0");
+      }
+      function updateClock() {
+        const now = new Date();
+        const endOfDay = new Date(now);
+        endOfDay.setHours(23, 59, 59, 999);
+        const diff = Math.max(0, endOfDay - now);
+        
+        const totalSeconds = Math.floor(diff / 1000);
+        const h = Math.floor(totalSeconds / 3600);
+        const m = Math.floor((totalSeconds % 3600) / 60);
+        const s = totalSeconds % 60;
+        
+        $("countdown").textContent = `${pad2(h)}:${pad2(m)}:${pad2(s)}`;
+      }
+      setInterval(updateClock, 250);
+      updateClock();
+
+      // =========================================================
+      // Mini countdown (until today ends at 11:59:59 PM)
+      // =========================================================
+      function updateLiveTimeCards() {
+        const now = new Date();
+        const endOfDay = new Date(now);
+        endOfDay.setHours(23, 59, 59, 999);
+        const diff = Math.max(0, endOfDay - now);
+        const totalSeconds = Math.floor(diff / 1000);
+        const h = Math.floor(totalSeconds / 3600);
+        const m = Math.floor((totalSeconds % 3600) / 60);
+        const s = totalSeconds % 60;
+        $("countMini").textContent = `${pad2(h)}:${pad2(m)}:${pad2(s)}`;
+      }
+      setInterval(updateLiveTimeCards, 250);
+      updateLiveTimeCards();
+
+      // =========================================================
+      // Rotating quotes
+      // =========================================================
+      const quotes = [
+        "You deserve a life that feels like a warm hug.",
+        "May today be soft, bright, and unforgettable.",
+        "Your smile is our favorite kind of light.",
+        "Some hearts are rare—yours is one of them.",
+        "Keep glowing. The world looks better with you in it.",
+        "May your dreams find you quickly and stay forever.",
+        "Family love: the quiet magic that never fades.",
+        "You’re not older, you’re more legendary.",
+        "The best memories are the ones you make with love.",
+        "Today is yours. Always has been.",
+      ];
+      function rotateQuote() {
+        const q = quotes[Math.floor(Math.random() * quotes.length)];
+        $("quoteText").textContent = q;
+        $("quoteTag").textContent = ["💖", "✨", "🎀", "🌙", "🎈"][Math.floor(Math.random() * 5)];
+      }
+      rotateQuote();
+      setInterval(rotateQuote, 5200);
+
+      // =========================================================
+      // Ambient floating effects (hearts/balloons/sparkles)
+      // =========================================================
+      const floatChars = ["💖", "🎈", "✨", "💗", "🎉", "⭐"];
+      function spawnFloat() {
+        const el = document.createElement("div");
+        el.className = "floatItem";
+        const ch = floatChars[Math.floor(Math.random() * floatChars.length)];
+        el.textContent = ch;
+        const x = Math.random() * 100;
+        el.style.left = `${x}vw`;
+        el.style.bottom = `-30px`;
+        const size = 14 + Math.random() * 22;
+        el.style.fontSize = `${size}px`;
+        const dur = 8 + Math.random() * 10;
+        el.style.animationDuration = `${dur}s`;
+        el.style.opacity = "0";
+        el.style.filter =
+          ch === "🎈"
+            ? "drop-shadow(0 0 16px rgba(46, 232, 255, 0.18))"
+            : "drop-shadow(0 0 16px rgba(255, 79, 216, 0.18))";
+        floatLayer.appendChild(el);
+        // Cleanup after animation
+        setTimeout(() => el.remove(), (dur + 0.2) * 1000);
+      }
+
+      function spawnFloatImg() {
+        const images = [
+          "IMG-20260509-WA0000.jpg",
+          "IMG-20260509-WA0001.jpg",
+          "IMG-20260509-WA0002.jpg",
+          "IMG-20260509-WA0003.jpg",
+          "IMG-20260509-WA0004.jpg",
+          "IMG-20260509-WA0005.jpg"
+        ];
+        const types = ["polaroid", "bubble", "frame"];
+        const type = types[Math.floor(Math.random() * types.length)];
+        
+        const container = document.createElement("div");
+        container.className = `floatingImage ${type}`;
+        const img = document.createElement("img");
+        img.src = images[Math.floor(Math.random() * images.length)];
+        container.appendChild(img);
+        
+        const x = Math.random() * 100;
+        container.style.left = `${x}vw`;
+        container.style.top = `110vh`;
+        
+        const dur = 14 + Math.random() * 20;
+        container.style.animationDuration = `${dur}s, ${3 + Math.random() * 5}s`;
+        container.style.opacity = 0.08 + Math.random() * 0.15;
+        
+        floatLayer.appendChild(container);
+        setTimeout(() => container.remove(), (dur + 0.5) * 1000);
+      }
+
+      function startAmbient() {
+        // Background decorative elements removed as requested
+      }
+
+      // =========================================================
+      // Cursor glow + trail particles
+      // =========================================================
+      let lastTrail = 0;
+      window.addEventListener("mousemove", (e) => {
+        mouseGlow.style.left = e.clientX + "px";
+        mouseGlow.style.top = e.clientY + "px";
+
+        const now = performance.now();
+        if (now - lastTrail > 24) {
+          lastTrail = now;
+          const dot = document.createElement("div");
+          dot.className = "trailDot";
+          dot.style.left = e.clientX + "px";
+          dot.style.top = e.clientY + "px";
+          document.body.appendChild(dot);
+          setTimeout(() => dot.remove(), 700);
+        }
+      });
+
+      // =========================================================
+      // Music autoplay + toggle (browser restrictions safe)
+      // =========================================================
+      let userToggledMusic = false;
+      let introPlayed = false;
+      let introListenerBound = false;
+      let introTrackConfigured = false;
+      const introTrackCandidates = [
+        "priya_s_Bollywood_Scene.mp3",
+        "happy-birthday-priya-sing-rajput.mp3",
+        "happy-birthday-priya-singh-rajput.mp3",
+        "happy-birthday-priya.mp3",
+      ];
+      let introTrackIndex = 0;
+
+      function setMusicUI(isPlaying) {
+        musicLabel.textContent = isPlaying ? "Pause Music" : "Play Music";
+        musicToggle.classList.toggle("btnPrimary", isPlaying);
+        musicToggle.classList.toggle("btnGhost", !isPlaying);
+      }
+
+      async function tryAutoplayMusic() {
+        // Many browsers block autoplay until a user gesture.
+        try {
+          await playBirthdayAudioFlow();
+          setMusicUI(true);
+        } catch {
+          setMusicUI(false);
+        }
+      }
+
+      async function playBirthdayAudioFlow() {
+        bgm.volume = 1.0;
+        await bgm.play();
+      }
+
+      musicToggle.addEventListener("click", async () => {
+        userToggledMusic = true;
+        const isAnyPlaying = !bgm.paused;
+        if (!isAnyPlaying) {
+          try {
+            await playBirthdayAudioFlow();
+            setMusicUI(true);
+          } catch {
+            setMusicUI(false);
+          }
+        } else {
+          bgm.pause();
+          setMusicUI(false);
+        }
+      });
+
+      // Also attempt play on first user click anywhere (helps mobile Safari)
+      window.addEventListener(
+        "pointerdown",
+        async () => {
+          if (userToggledMusic) return;
+          const isAnyPlaying = !bgm.paused;
+          if (!isAnyPlaying) {
+            try {
+              await playBirthdayAudioFlow();
+              setMusicUI(true);
+            } catch {
+              /* ignore */
+            }
+          }
+        },
+        { once: true }
+      );
+
+      // =========================================================
+      // 3D Gallery Interaction
+      // =========================================================
+      const gallery3d = $("3dGallery");
+      let rotY = 0;
+      let isDragging = false;
+      let startX = 0;
+
+      window.addEventListener("mousedown", (e) => {
+        if (e.target.closest("#gallery")) {
+          isDragging = true;
+          startX = e.clientX;
+          gallery3d.style.animationPlayState = "paused";
+        }
+      });
+
+      window.addEventListener("mousemove", (e) => {
+        if (isDragging) {
+          const deltaX = e.clientX - startX;
+          rotY += deltaX * 0.2;
+          gallery3d.style.transform = `rotateY(${rotY}deg)`;
+          startX = e.clientX;
+        }
+      });
+
+      window.addEventListener("mouseup", () => {
+        isDragging = false;
+        // Animation remains paused or resumes if you prefer
+      });
+
+      // Touch support
+      window.addEventListener("touchstart", (e) => {
+        if (e.target.closest("#gallery")) {
+          isDragging = true;
+          startX = e.touches[0].clientX;
+          gallery3d.style.animationPlayState = "paused";
+        }
+      });
+
+      window.addEventListener("touchmove", (e) => {
+        if (isDragging) {
+          const deltaX = e.touches[0].clientX - startX;
+          rotY += deltaX * 0.2;
+          gallery3d.style.transform = `rotateY(${rotY}deg)`;
+          startX = e.touches[0].clientX;
+        }
+      });
+
+      window.addEventListener("touchend", () => {
+        isDragging = false;
+      });
+
+      // Keep video audio clear: lower/pause BGM while any video plays.
+      const registerVideoAudioPriority = (videoEl) => {
+        if (!videoEl) return;
+        // Logic removed to keep music loud as requested
+      };
+      registerVideoAudioPriority(miniPriyaVideo);
+
+      // =========================================================
+      // Confetti + Fireworks engine (single canvas)
+      // =========================================================
+      const fx = $("fx");
+      const ctx = fx.getContext("2d", { alpha: true });
+      let W = 0,
+        H = 0,
+        DPR = 1;
+      function resize() {
+        DPR = Math.min(2, window.devicePixelRatio || 1);
+        W = Math.floor(window.innerWidth);
+        H = Math.floor(window.innerHeight);
+        fx.width = Math.floor(W * DPR);
+        fx.height = Math.floor(H * DPR);
+        fx.style.width = W + "px";
+        fx.style.height = H + "px";
+        ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+      }
+      window.addEventListener("resize", resize);
+      resize();
+
+      const confetti = [];
+      const sparks = [];
+      let fireworksMode = false;
+      let fireworksUntil = 0;
+
+      function rand(a, b) {
+        return a + Math.random() * (b - a);
+      }
+      function pick(arr) {
+        return arr[(Math.random() * arr.length) | 0];
+      }
+
+      const confColors = [
+        "rgba(255,79,216,0.95)",
+        "rgba(138,91,255,0.95)",
+        "rgba(46,232,255,0.95)",
+        "rgba(255,211,111,0.95)",
+        "rgba(255,255,255,0.85)",
+      ];
+
+      function confettiBurst(n = 180, x = W / 2, y = H * 0.32) {
+        for (let i = 0; i < n; i++) {
+          confetti.push({
+            x,
+            y,
+            vx: rand(-4.5, 4.5),
+            vy: rand(-6.2, -2.2),
+            g: rand(0.08, 0.16),
+            w: rand(6, 12),
+            h: rand(4, 10),
+            rot: rand(0, Math.PI * 2),
+            vr: rand(-0.18, 0.18),
+            life: rand(70, 130),
+            color: pick(confColors),
+            shape: Math.random() < 0.2 ? "circle" : "rect",
+          });
+        }
+      }
+
+      function launchFirework() {
+        const x = rand(W * 0.15, W * 0.85);
+        const y = rand(H * 0.12, H * 0.45);
+        const hue = rand(0, 360);
+        const count = Math.floor(rand(28, 48));
+        for (let i = 0; i < count; i++) {
+          const a = (i / count) * Math.PI * 2;
+          const sp = rand(1.8, 5.6);
+          sparks.push({
+            x,
+            y,
+            vx: Math.cos(a) * sp,
+            vy: Math.sin(a) * sp,
+            g: rand(0.03, 0.08),
+            life: rand(50, 95),
+            hue,
+            size: rand(1.6, 2.8),
+          });
+        }
+      }
+
+      function fireworkMode(ms = 8000) {
+        fireworksMode = true;
+        fireworksUntil = Date.now() + ms;
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, W, H);
+
+        // Confetti
+        for (let i = confetti.length - 1; i >= 0; i--) {
+          const p = confetti[i];
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += p.g;
+          p.rot += p.vr;
+          p.life -= 1;
+
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate(p.rot);
+          ctx.globalAlpha = Math.max(0, Math.min(1, p.life / 90));
+          ctx.fillStyle = p.color;
+          if (p.shape === "circle") {
+            ctx.beginPath();
+            ctx.arc(0, 0, p.w * 0.45, 0, Math.PI * 2);
+            ctx.fill();
+          } else {
+            ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+          }
+          ctx.restore();
+          if (p.life <= 0 || p.y > H + 40) confetti.splice(i, 1);
+        }
+
+        // Firework sparks
+        for (let i = sparks.length - 1; i >= 0; i--) {
+          const s = sparks[i];
+          s.x += s.vx;
+          s.y += s.vy;
+          s.vy += s.g;
+          s.life -= 1;
+          const alpha = Math.max(0, Math.min(1, s.life / 70));
+          ctx.globalCompositeOperation = "lighter";
+          ctx.fillStyle = `hsla(${s.hue}, 100%, 70%, ${alpha})`;
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.globalCompositeOperation = "source-over";
+          if (s.life <= 0) sparks.splice(i, 1);
+        }
+
+        // Fireworks timing
+        if (fireworksMode) {
+          if (Date.now() < fireworksUntil) {
+            if (Math.random() < 0.08) launchFirework();
+          } else {
+            fireworksMode = false;
+          }
+        }
+
+        requestAnimationFrame(draw);
+      }
+      requestAnimationFrame(draw);
+
+      // =========================================================
+      // Surprise: 100+ wishes feed + confetti + glow + fireworks
+      // =========================================================
+      const wishTemplates = [
+        "Happy Birthday Priya 💖 — you deserve the sweetest year ahead.",
+        "May your smile always stay forever ✨",
+        "Wishing you happiness, love, and success in everything you do 🎀",
+        "You make life brighter just by being you 🌙",
+        "May your dreams come true, one beautiful step at a time ⭐",
+        "To Priya: strong heart, soft soul, pure magic 💗",
+        "May every day feel like a celebration 🎉",
+        "You’re our joy, our pride, our favorite person 💖",
+        "Keep glowing — the world needs your light ✨",
+        "May life give you beautiful surprises, always 🎁",
+      ];
+
+      function buildWishes(count = 120) {
+        const out = [];
+        for (let i = 0; i < count; i++) {
+          const base = pick(wishTemplates);
+          const stamp = i % 3 === 0 ? "🎈" : i % 3 === 1 ? "✨" : "💖";
+          out.push({ title: `Wish #${i + 1} ${stamp}`, text: base });
+        }
+        // Add a few extra “emotional” ones
+        out.push(
+          { title: "A brother’s promise 💖", text: "No matter what, you’ll always have me. Always." },
+          { title: "Family forever ✨", text: "May you always feel loved, protected, and proud of who you are." },
+          { title: "For Priya 🎀", text: "May your life be filled with beautiful memories—and even better dreams." }
+        );
+        return out;
+      }
+
+      let wishes = buildWishes(120);
+      let wishesTimer = null;
+
+      function openSurprise() {
+        overlay.classList.add("show");
+        overlay.style.pointerEvents = "auto";
+        wishesList.innerHTML = "";
+
+        screenGlow.classList.add("on");
+        setTimeout(() => screenGlow.classList.remove("on"), 1200);
+
+        confettiBurst(260, W / 2, H * 0.28);
+        fireworkMode(9000);
+
+        let i = 0;
+        clearInterval(wishesTimer);
+        wishesTimer = setInterval(() => {
+          if (i >= wishes.length) {
+            clearInterval(wishesTimer);
+            // After wishes finish, do a cinematic finale
+            setTimeout(() => showFinale(), 1100);
+            return;
+          }
+          const w = wishes[i++];
+          const item = document.createElement("div");
+          item.className = "wishItem";
+          item.innerHTML = `<div class="wishLine1">${escapeHTML(w.title)}</div><div class="wishLine2">${escapeHTML(
+            w.text
+          )}</div>`;
+          wishesList.appendChild(item);
+          wishesList.scrollTop = wishesList.scrollHeight;
+          if (i % 10 === 0) confettiBurst(80, rand(W * 0.2, W * 0.8), rand(H * 0.15, H * 0.35));
+        }, 220);
+      }
+
+      function closeSurprise() {
+        overlay.classList.remove("show");
+        overlay.style.pointerEvents = "none";
+        clearInterval(wishesTimer);
+      }
+
+      closeOverlay.addEventListener("click", closeSurprise);
+      overlay.addEventListener("click", (e) => {
+        if (e.target === overlay) closeSurprise();
+      });
+
+      surpriseBtn.addEventListener("click", () => {
+        openSurprise();
+      });
+
+      // =========================================================
+      // Finale fireworks (after time OR after surprise)
+      // =========================================================
+      let finaleShown = false;
+      function showFinale() {
+        if (finaleShown) return;
+        finaleShown = true;
+        fireworkMode(14000);
+        screenGlow.classList.add("on");
+        setTimeout(() => screenGlow.classList.remove("on"), 1200);
+        setTimeout(() => {
+          finale.classList.add("show");
+          // Hide after a while so user can keep scrolling
+          setTimeout(() => finale.classList.remove("show"), 6500);
+        }, 700);
+      }
+
+      // Auto finale after a bit if user does nothing
+      setTimeout(() => showFinale(), 42000);
+
+      // =========================================================
+      // Easter egg: type "PRIYA" anywhere to reveal a secret wish
+      // =========================================================
+      let egg = "";
+      window.addEventListener("keydown", (e) => {
+        const k = (e.key || "").toUpperCase();
+        if (k.length === 1 && k >= "A" && k <= "Z") {
+          egg = (egg + k).slice(-5);
+          if (egg === "PRIYA") {
+            // Secret message: an extra cinematic glow + a special wish
+            screenGlow.classList.add("on");
+            setTimeout(() => screenGlow.classList.remove("on"), 1200);
+            confettiBurst(220, W / 2, H * 0.26);
+            fireworkMode(6500);
+            if (!overlay.classList.contains("show")) openSurprise();
+            const item = document.createElement("div");
+            item.className = "wishItem";
+            item.innerHTML =
+              '<div class="wishLine1">Easter Egg Unlocked 🔓</div>' +
+              '<div class="wishLine2">Priya, you’re the kind of sister people pray for. You are loved—more than words can hold. 💖</div>';
+            wishesList.appendChild(item);
+            wishesList.scrollTop = wishesList.scrollHeight;
+          }
+        }
+      });
+
+      // =========================================================
+      // Utility: basic HTML escape
+      // =========================================================
+      function escapeHTML(str) {
+        return String(str)
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#039;");
+      }
+
+      // Start!
+      boot();
+    </script>
+  </body>
+</html>
